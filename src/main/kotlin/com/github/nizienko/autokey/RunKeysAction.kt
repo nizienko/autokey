@@ -3,6 +3,7 @@ package com.github.nizienko.autokey
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
+import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
@@ -12,7 +13,7 @@ class RunKeysAction: AnAction() {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
         val text = getText(project, editor)
-        KeyRunner().launch(text)
+        service<KeyRunner>().launch(text)
     }
 
     override fun update(e: AnActionEvent) {

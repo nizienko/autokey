@@ -1,0 +1,8 @@
+sleep 3
+type top
+enter
+sleep 5
+ctrl c
+enter
+type clear
+enter
