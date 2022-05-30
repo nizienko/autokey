@@ -7,12 +7,15 @@ import com.intellij.openapi.components.service
 import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.util.TextRange
+import com.intellij.openapi.wm.ToolWindowManager
 
-class RunKeysAction: AnAction() {
+internal class RunKeysAction: AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
         val text = getText(project, editor)
+        val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("AutoKey runner");
+        toolWindow?.activate(null);
         service<KeyRunner>().launch(text)
     }
 

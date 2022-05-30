@@ -5,18 +5,17 @@
 
     <!-- Public plugin name should be written in Title Case.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
-    <name>Autokey</name>
+    <name>Auto Key</name>
 
     <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
-    <vendor email="support@yourcompany.com" url="https://www.yourcompany.com">YourCompany</vendor>
+    <vendor email="eugene.nizienko@gmail.com" url="https://github.com/nizienko/autokey">GitHub</vendor>
 
     <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
-  ]]></description>
+Simple plugin which can help you to automate keyboard key sequences. It might be useful when working in console or to insert text in places where pasting is not allowed. On mac it requires idea to be added in accessibility list, it will ask you to add.
+]]></description>
 
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
@@ -25,11 +24,14 @@
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
+        <toolWindow id="AutoKey runner" secondary="true" icon="MyIcons.Cat" anchor="bottom"
+                    factoryClass="com.github.nizienko.autokey.AutoKeyToolWindowFactory"/>
+        <notificationGroup id="AutoKey Notification Group"
+                           displayType="BALLOON"/>
     </extensions>
     <actions>
         <action id="com.github.nizienko.autokey.RunKeysAction" class="com.github.nizienko.autokey.RunKeysAction"
-                text="Run Keys" description="Executes selected text">
+                text="Run Keys" icon="MyIcons.Cat" description="Executes selected text">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
     </actions>

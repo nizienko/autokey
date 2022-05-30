@@ -7,22 +7,44 @@ import org.assertj.swing.core.Robot
 import kotlin.concurrent.thread
 
 @Service
-class KeyRunner {
+internal class KeyRunner {
     private val robot = BasicRobot.robotWithCurrentAwtHierarchyWithoutScreenLock()
+
+    private var currentScript: String = ""
 
     fun launch(script: String) {
         thread {
-            execute(script)
+            currentScript = script
+            listeners.forEach { it.onScriptStarted(script) }
+            execute(currentScript)
+            listeners.forEach { it.onScriptFinished(script) }
         }
     }
 
-    private fun execute(string: String) {
-        string.split("\n").forEach { line ->
-            val command = Command.values().firstOrNull { command ->
-                command.isValidFor(line)
+    private fun execute(script: String) {
+        script.split("\n")
+            .filter { line -> line.isNotEmpty() && line.startsWith("#").not() }
+            .forEachIndexed { n, line ->
+                listeners.forEach { it.onStepStarted(n, line) }
+                val command = Command.values().firstOrNull { command ->
+                    command.isValidFor(line)
+                }
+                if (command == null) {
+                    listeners.forEach { it.onStepFinished(n, line, false, "Unknown command") }
+                } else {
+                    try {
+                        command.execute(robot, line)
+                        listeners.forEach { it.onStepFinished(n, line, true) }
+                    } catch (e: Throwable) {
+                        listeners.forEach { it.onStepFinished(n, line, false, e.localizedMessage) }
+                    }
+                }
             }
-            command?.execute(robot, line) ?: println("Unknown command '$line'")
-        }
+    }
+
+    private val listeners: MutableList<KeyRunnerListener> = mutableListOf()
+    fun addListener(listener: KeyRunnerListener) {
+        listeners.add(listener)
     }
 }
 
@@ -30,16 +52,6 @@ private val sleepRegex = Regex("^sleep (\\d{1,5})")
 private val typeRegex = Regex("^type (.*)")
 
 internal enum class Command {
-    HOT_KEY {
-        override fun isValidFor(line: String): Boolean {
-            return KeyStrokeAdapter.getKeyStroke(line) != null
-        }
-
-        override fun execute(robot: Robot, line: String) {
-            val keyStroke = KeyStrokeAdapter.getKeyStroke(line)
-            robot.pressAndReleaseKey(keyStroke.keyCode, keyStroke.modifiers)
-        }
-    },
     SLEEP {
         override fun isValidFor(line: String): Boolean {
             return sleepRegex.matches(line)
@@ -61,8 +73,29 @@ internal enum class Command {
                 robot.type(it)
             }
         }
+    },
+    HOT_KEY {
+        override fun isValidFor(line: String): Boolean {
+            return try {
+                KeyStrokeAdapter.getKeyStroke(line) != null
+            } catch (e: Throwable) {
+                false
+            }
+        }
+
+        override fun execute(robot: Robot, line: String) {
+            val keyStroke = KeyStrokeAdapter.getKeyStroke(line)
+            robot.pressAndReleaseKey(keyStroke.keyCode, keyStroke.modifiers)
+        }
     };
 
     abstract fun isValidFor(line: String): Boolean
     abstract fun execute(robot: Robot, line: String)
+}
+
+interface KeyRunnerListener {
+    fun onScriptStarted(script: String)
+    fun onScriptFinished(script: String)
+    fun onStepStarted(n: Int, step: String)
+    fun onStepFinished(n: Int, step: String, success: Boolean, error: String = "")
 }
