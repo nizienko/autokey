@@ -11,15 +11,26 @@ internal class KeyRunner {
     private val robot = BasicRobot.robotWithCurrentAwtHierarchyWithoutScreenLock()
 
     private var currentScript: String = ""
+    private var timeBeforeStart = 5000L
 
     fun launch(script: String) {
         thread {
             currentScript = script
+            listeners.forEach { it.onScriptLoaded(script) }
             listeners.forEach { it.onScriptStarted(script) }
+            Thread.sleep(timeBeforeStart)
             execute(currentScript)
             listeners.forEach { it.onScriptFinished(script) }
         }
     }
+    fun setScript(script: String) {
+        currentScript = script
+    }
+    fun relaunch() {
+        launch(currentScript)
+    }
+
+    fun isScriptLoaded(): Boolean = currentScript.isNotEmpty()
 
     private fun execute(script: String) {
         script.split("\n")
@@ -98,4 +109,5 @@ interface KeyRunnerListener {
     fun onScriptFinished(script: String)
     fun onStepStarted(n: Int, step: String)
     fun onStepFinished(n: Int, step: String, success: Boolean, error: String = "")
+    fun onScriptLoaded(script: String)
 }

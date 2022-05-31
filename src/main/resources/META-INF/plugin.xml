@@ -25,14 +25,21 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
         <toolWindow id="AutoKey runner" secondary="true" icon="MyIcons.Cat" anchor="bottom"
-                    factoryClass="com.github.nizienko.autokey.AutoKeyToolWindowFactory"/>
+                    factoryClass="com.github.nizienko.autokey.ui.AutoKeyToolWindowFactory"/>
         <notificationGroup id="AutoKey Notification Group"
                            displayType="BALLOON"/>
     </extensions>
     <actions>
-        <action id="com.github.nizienko.autokey.RunKeysAction" class="com.github.nizienko.autokey.RunKeysAction"
+        <group id="RunKeysActionGroup" text="Auto Key Actions" popup="false" icon="MyIcons.Cat"/>
+        <action id="com.github.nizienko.autokey.actions.RunKeysAction"
+                class="com.github.nizienko.autokey.actions.RunKeysAction"
                 text="Run Keys" icon="MyIcons.Cat" description="Executes selected text">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+        </action>
+        <action id="com.github.nizienko.autokey.actions.RerunKeysAction"
+                class="com.github.nizienko.autokey.actions.RerunKeysAction"
+                text="Rerun Keys" icon="AllIcons.Actions.Rerun" description="Rerun script">
+            <add-to-group group-id="RunKeysActionGroup" anchor="first"/>
         </action>
     </actions>
 </idea-plugin>
