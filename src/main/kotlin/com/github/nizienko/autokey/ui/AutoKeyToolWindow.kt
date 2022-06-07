@@ -2,6 +2,7 @@ package com.github.nizienko.autokey.ui
 
 import com.github.nizienko.autokey.KeyRunner
 import com.github.nizienko.autokey.KeyRunnerListener
+import com.github.nizienko.autokey.settings.AutoKeySettingsState
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
 import com.intellij.openapi.actionSystem.ActionGroup
@@ -70,7 +71,10 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
 
     override fun onScriptStarted(script: String) {
         clearConsole()
-        printToConsole("Here we go in 5 sec...\n")
+        val timeout = AutoKeySettingsState.getInstance().timeoutSecondsBeforeRun
+        if (timeout > 0) {
+            printToConsole("Here we go in $timeout sec...\n")
+        }
     }
 
     override fun onScriptFinished(script: String) {

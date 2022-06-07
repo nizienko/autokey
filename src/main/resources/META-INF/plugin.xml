@@ -28,6 +28,13 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
                     factoryClass="com.github.nizienko.autokey.ui.AutoKeyToolWindowFactory"/>
         <notificationGroup id="AutoKey Notification Group"
                            displayType="BALLOON"/>
+        <applicationService
+                serviceImplementation="com.github.nizienko.autokey.settings.AutoKeySettingsState"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.github.nizienko.autokey.settings.AutoKeyConfigurable"
+                id="com.github.nizienko.autokey.settings.AutoKeyConfigurable"
+                displayName="Auto Key"/>
     </extensions>
     <actions>
         <group id="RunKeysActionGroup" text="Auto Key Actions" popup="false" icon="MyIcons.Cat"/>
@@ -36,10 +43,15 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
                 text="Run Keys" icon="MyIcons.Cat" description="Executes selected text">
             <add-to-group group-id="EditorPopupMenu" anchor="first"/>
         </action>
+        <action id="com.github.nizienko.autokey.actions.OpenRunKeysSettingsAction"
+                class="com.github.nizienko.autokey.actions.OpenRunKeysSettingsAction"
+                text="Rerun Keys" icon="AllIcons.General.Settings" description="Settings">
+            <add-to-group group-id="RunKeysActionGroup" anchor="first"/>
+        </action>
         <action id="com.github.nizienko.autokey.actions.RerunKeysAction"
                 class="com.github.nizienko.autokey.actions.RerunKeysAction"
-                text="Rerun Keys" icon="AllIcons.Actions.Rerun" description="Rerun script">
-            <add-to-group group-id="RunKeysActionGroup" anchor="first"/>
+                text="Rerun Keys" icon="AllIcons.Actions.Execute" description="Rerun script">
+            <add-to-group group-id="RunKeysActionGroup" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>

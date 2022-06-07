@@ -1,5 +1,6 @@
 package com.github.nizienko.autokey
 
+import com.github.nizienko.autokey.settings.AutoKeySettingsState
 import com.intellij.openapi.components.Service
 import com.intellij.ui.KeyStrokeAdapter
 import org.assertj.swing.core.BasicRobot
@@ -11,21 +12,22 @@ internal class KeyRunner {
     private val robot = BasicRobot.robotWithCurrentAwtHierarchyWithoutScreenLock()
 
     private var currentScript: String = ""
-    private var timeBeforeStart = 5000L
 
     fun launch(script: String) {
         thread {
             currentScript = script
             listeners.forEach { it.onScriptLoaded(script) }
             listeners.forEach { it.onScriptStarted(script) }
-            Thread.sleep(timeBeforeStart)
+            Thread.sleep(AutoKeySettingsState.getInstance().timeoutSecondsBeforeRun * 1000L)
             execute(currentScript)
             listeners.forEach { it.onScriptFinished(script) }
         }
     }
+
     fun setScript(script: String) {
         currentScript = script
     }
+
     fun relaunch() {
         launch(currentScript)
     }
