@@ -17,10 +17,10 @@ jobs:
           java-version: 11
       - name: Build the plugin
         run: gradle :buildPlugin
-      - name: Save fails report
+      - name: Save the plugin
         if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
-          name: plugin
+          name: autokey.zip
           path: |
-            build/distributions
+            build/distributions/autokey-*.zip
