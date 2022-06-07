@@ -15,6 +15,7 @@ internal class AutoKeySettingsComponent {
         set(value) {
             timeoutSpinner.number = value
         }
+
     val panel = BorderLayoutPanel().apply {
         addToTop(
             FormBuilder.createFormBuilder()
