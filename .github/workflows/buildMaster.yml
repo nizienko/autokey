@@ -21,6 +21,6 @@ jobs:
         if: ${{ success() }}
         uses: actions/upload-artifact@v3
         with:
-          name: autokey.zip
+          name: autokey-plugin
           path: |
             build/distributions/autokey-*.zip
