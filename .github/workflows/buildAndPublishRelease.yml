@@ -1,4 +1,4 @@
-name: Build Plugin Master
+name: Build and publish plugin
 on:
   release:
     types: [published]
