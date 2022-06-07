@@ -1,7 +1,7 @@
 name: Build Plugin Master
 on:
   release:
-    types: [published]
+    types: [created]
 jobs:
   build-and-publish:
     name: Build

@@ -37,8 +37,8 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
     )
 
     private val consoleDocument: Document = EditorFactory.getInstance().createDocument("")
-    private val consoleEditor: Editor =
-        EditorFactory.getInstance().createEditor(consoleDocument, project, PlainTextFileType.INSTANCE, true)
+    private val consoleEditor: Editor = EditorFactory.getInstance()
+        .createEditor(consoleDocument, project, PlainTextFileType.INSTANCE, true)
     private val disposableConsoleEditorPanel =
         DisposableEditorPanel(consoleEditor).apply { Disposer.register(toolWindow.disposable, this) }
 
