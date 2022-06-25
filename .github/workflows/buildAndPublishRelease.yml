@@ -1,8 +1,8 @@
 name: Build and publish plugin
 on:
   release:
-    branches:
-      - masterjobs:
+    types: [published]
+jobs:
   build-and-publish:
     name: Build
     runs-on: ubuntu-latest
