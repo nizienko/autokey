@@ -24,6 +24,6 @@ internal class AutoKeySettingsState: PersistentStateComponent<AutoKeySettingsSta
     }
 
     override fun loadState(state: AutoKeySettingsState) {
-        XmlSerializerUtil.copyBean(state, this);
+        XmlSerializerUtil.copyBean(state, this)
     }
 }

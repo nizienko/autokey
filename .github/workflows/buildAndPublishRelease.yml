@@ -1,14 +1,14 @@
 name: Build and publish plugin
 on:
   release:
-    types: [published]
-jobs:
+    branches:
+      - masterjobs:
   build-and-publish:
     name: Build
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@release
+        uses: actions/checkout@v3
       - name: Setup Java
         uses: actions/setup-java@v3
         with:
