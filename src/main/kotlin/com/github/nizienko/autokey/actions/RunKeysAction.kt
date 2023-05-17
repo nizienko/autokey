@@ -15,7 +15,7 @@ internal class RunKeysAction: AnAction(), DumbAware {
     override fun actionPerformed(e: AnActionEvent) {
         val project = e.project ?: return
         val editor = e.getData(CommonDataKeys.EDITOR) ?: return
-        val text = getText(project, editor)
+        val text = getText(editor)
         val toolWindow = ToolWindowManager.getInstance(project).getToolWindow("AutoKey runner");
         toolWindow?.activate(null);
         service<KeyRunner>().launch(text)
@@ -28,7 +28,7 @@ internal class RunKeysAction: AnAction(), DumbAware {
                 && editor != null && editor.selectionModel.hasSelection())
     }
 
-    private fun getText(project: Project, editor: Editor): String {
+    private fun getText(editor: Editor): String {
         val document = editor.document
         val caret = editor.caretModel.primaryCaret
         val start = caret.selectionStart
