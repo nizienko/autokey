@@ -24,7 +24,7 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-        <toolWindow id="AutoKey runner" secondary="true" icon="MyIcons.Cat" anchor="bottom"
+        <toolWindow id="AutoKey" secondary="true" icon="MyIcons.Cat" anchor="bottom"
                     factoryClass="com.github.nizienko.autokey.ui.AutoKeyToolWindowFactory"/>
         <notificationGroup id="AutoKey Notification Group"
                            displayType="BALLOON"/>
@@ -38,6 +38,7 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
     </extensions>
     <actions>
         <group id="RunKeysActionGroup" text="Auto Key Actions" popup="false" icon="MyIcons.Cat"/>
+        <group id="RunKeysSettingsActionGroup" text="Auto Key Settings" popup="false" icon="MyIcons.Cat"/>
         <action id="com.github.nizienko.autokey.actions.RunKeysAction"
                 class="com.github.nizienko.autokey.actions.RunKeysAction"
                 text="Run Keys" icon="MyIcons.Cat" description="Executes selected text">
@@ -46,11 +47,16 @@ Simple plugin which can help you to automate keyboard key sequences. It might be
         <action id="com.github.nizienko.autokey.actions.OpenRunKeysSettingsAction"
                 class="com.github.nizienko.autokey.actions.OpenRunKeysSettingsAction"
                 text="Rerun Keys" icon="AllIcons.General.Settings" description="Settings">
-            <add-to-group group-id="RunKeysActionGroup" anchor="first"/>
+            <add-to-group group-id="RunKeysSettingsActionGroup" anchor="first"/>
         </action>
         <action id="com.github.nizienko.autokey.actions.RerunKeysAction"
                 class="com.github.nizienko.autokey.actions.RerunKeysAction"
-                text="Rerun Keys" icon="AllIcons.Actions.Execute" description="Rerun script">
+                text="Run Keys" icon="AllIcons.Actions.Execute" description="Run script">
+            <add-to-group group-id="RunKeysActionGroup" anchor="last"/>
+        </action>
+        <action id="com.github.nizienko.autokey.actions.StopKeysAction"
+                class="com.github.nizienko.autokey.actions.StopKeysAction"
+                text="Stop Keys" icon="AllIcons.Actions.Suspend" description="Stop script">
             <add-to-group group-id="RunKeysActionGroup" anchor="last"/>
         </action>
     </actions>

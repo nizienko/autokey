@@ -2,6 +2,7 @@ package com.github.nizienko.autokey.ui
 
 import com.github.nizienko.autokey.KeyRunner
 import com.github.nizienko.autokey.KeyRunnerListener
+import com.github.nizienko.autokey.StepResult
 import com.github.nizienko.autokey.settings.AutoKeySettingsState
 import com.intellij.notification.NotificationGroupManager
 import com.intellij.notification.NotificationType
@@ -33,14 +34,23 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
     private val actionToolbar = ActionToolbarImpl(
         "AutoKeyToolWindow",
         ActionManager.getInstance().getAction("RunKeysActionGroup") as ActionGroup,
-        true
+        false
+    )
+    private val settingsToolbar = ActionToolbarImpl(
+        "AutoKeyToolWindow",
+        ActionManager.getInstance().getAction("RunKeysSettingsActionGroup") as ActionGroup,
+        false
     )
 
     private val consoleDocument: Document = EditorFactory.getInstance().createDocument("")
     private val consoleEditor: Editor = EditorFactory.getInstance()
         .createEditor(consoleDocument, project, PlainTextFileType.INSTANCE, true)
     private val disposableConsoleEditorPanel =
-        DisposableEditorPanel(consoleEditor).apply { Disposer.register(toolWindow.disposable, this) }
+        DisposableEditorPanel(consoleEditor).apply {
+            Disposer.register(toolWindow.disposable, this)
+            actionToolbar.targetComponent = this
+            settingsToolbar.targetComponent = this
+        }
 
 
     private val scriptDocument: Document = EditorFactory.getInstance().createDocument("").apply {
@@ -57,7 +67,10 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
 
 
     private val panel = BorderLayoutPanel().apply {
-        addToTop(actionToolbar)
+        addToLeft(BorderLayoutPanel().apply {
+            addToTop(actionToolbar)
+            addToBottom(settingsToolbar)
+        })
 
         addToCenter(Splitter().apply {
             firstComponent = disposableScriptEditorPanel
@@ -89,11 +102,11 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
         printToConsole(step)
     }
 
-    override fun onStepFinished(n: Int, step: String, success: Boolean, error: String) {
-        if (success) {
-            printToConsole(" - OK\n")
-        } else {
-            printToConsole(" - ERROR $error\n")
+    override fun onStepFinished(n: Int, step: String, result: StepResult, message: String) {
+        when (result) {
+            StepResult.FINISHED -> printToConsole(" - OK\n")
+            StepResult.ERROR -> printToConsole(" - ERROR $message\n")
+            StepResult.CANCELED -> printToConsole(" - Stopped\n")
         }
     }
 
@@ -123,5 +136,3 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
         }
     }
 }
-
-internal class AutoKeyToolbar
