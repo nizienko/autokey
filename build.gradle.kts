@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "com.github.nizienko"
-version = "0.0.7"
+version = "0.0.8"
 
 repositories {
     mavenCentral()
@@ -20,14 +20,14 @@ kotlin {
 }
 
 intellij {
-    version.set("2024.1")
+    version.set("2024.3")
     type.set("IC")
 }
 
 tasks {
     patchPluginXml {
         sinceBuild.set("233.1")
-        untilBuild.set("242.*")
+        untilBuild.set("251.*")
     }
     withType<JavaCompile> {
         sourceCompatibility = "17"

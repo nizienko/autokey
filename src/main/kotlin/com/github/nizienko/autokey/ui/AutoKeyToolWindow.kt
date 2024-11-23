@@ -31,12 +31,12 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
         keyRunner.addListener(this)
     }
 
-    private val actionToolbar = ActionToolbarImpl(
+    private val actionToolbar = ActionManager.getInstance().createActionToolbar(
         "AutoKeyToolWindow",
         ActionManager.getInstance().getAction("RunKeysActionGroup") as ActionGroup,
         false
     )
-    private val settingsToolbar = ActionToolbarImpl(
+    private val settingsToolbar = ActionManager.getInstance().createActionToolbar(
         "AutoKeyToolWindow",
         ActionManager.getInstance().getAction("RunKeysSettingsActionGroup") as ActionGroup,
         false
@@ -68,8 +68,8 @@ internal class AutoKeyToolWindow(private val project: Project, private val toolW
 
     private val panel = BorderLayoutPanel().apply {
         addToLeft(BorderLayoutPanel().apply {
-            addToTop(actionToolbar)
-            addToBottom(settingsToolbar)
+            addToTop(actionToolbar.component)
+            addToBottom(settingsToolbar.component)
         })
 
         addToCenter(Splitter().apply {
